@@ -14,7 +14,7 @@ input [1:0]CounterFlag;
 output reg [9:0]CounterOut;
 
 //内部信号：
-//counter：内置计数器，在50MHz时钟下，每1ms加1，计数到999，范围为0~999
+//counter：内置计数器，在50MHz时钟下，每1ms计数1000次
 reg [31:0]counter;
 
 initial begin
@@ -38,7 +38,7 @@ always @(posedge clk_50M) begin
         end
         2'b10:begin
             //开始
-            if (counter != 32'd1000) begin
+            if (counter != 32'd50000) begin
                 counter <= counter + 1;
             end
             else begin
