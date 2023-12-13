@@ -21,6 +21,7 @@ FinalDesign DUT (
 
 // Clock generation, 20ns period, 50MHz frequency
 always #10 clk_50M = ~clk_50M;
+//1 second = 1000000000;
 
 // Testbench stimulus
 initial begin
@@ -42,7 +43,14 @@ initial begin
     // Set start signal
     start = 1;
 
-    #500000000;//Waiting for 0 ~ 1 second(0~1000000000ns) 
+    // Wait for 2~6 seconds
+    #1000000000
+    #1000000000
+    //2s
+
+    // Wait for 0~1 second(Catch the signal)
+    #500000000
+    //0.5s
 
     // Set stop signal
     stop = 1;
