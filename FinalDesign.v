@@ -11,7 +11,7 @@
 // （6）如果 LED 指示灯点亮前，按下 stop 键，被视为犯规，数码管上应给出犯规指示。
 // （7）连续进行多次测试后，可查阅所有测试结果中的最短时间、最长时间和平均时间。
 // （8）两个人比赛，显示两人的反应时间及获胜者。
-module completion_timer (
+module FinalDesign (
     clk_50M,clear,start,stop,codeout,LED
 );
 
@@ -40,6 +40,7 @@ MainLogic ML(
     .start(start),
     .stop(stop),
     .CounterFlag(CounterFlag),//根据不同输入信号产生不同的CounterFlag
+    .CounterOut(CounterOut),//接受计数器输出用于判断是否犯规
     .codeout(codeout),//控制数码管显示犯规指示    
     .LED(LED)//控制LED指示灯
 );
