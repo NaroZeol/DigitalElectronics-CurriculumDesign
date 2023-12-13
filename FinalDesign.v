@@ -28,8 +28,10 @@ output reg LED;
 //CounterOut：计数器输出，要求计算到999
 //CounterFlag：用于控制计数器的开始、停止、清零
 //00->清零，01->停止，10->开始
+//ErrorFlag：用于控制数码管显示犯规指示
 reg [9:0]CounterOut;
 reg [1:0]CounterFlag;
+reg ErrorFlag;
 
 //主逻辑，生成随机数，在start信号到来时，开始计时，同时点亮LED，
 //在stop信号到来时，停止计时，同时熄灭LED
@@ -40,8 +42,7 @@ MainLogic ML(
     .start(start),
     .stop(stop),
     .CounterFlag(CounterFlag),//根据不同输入信号产生不同的CounterFlag
-    .CounterOut(CounterOut),//接受计数器输出用于判断是否犯规
-    .codeout(codeout),//控制数码管显示犯规指示    
+    .ErrorFlag(ErrorFlag),//控制数码管显示犯规指示    
     .LED(LED)//控制LED指示灯
 );
 
@@ -58,6 +59,8 @@ Counter C(
 DynamicScanTubes DST(
     .clk_50M(clk_50M),
     .DataIn(CounterOut),
+    .ErrorFlag(ErrorFlag),
+    .DIG(DIG),
     .codeout(codeout)
 );
 

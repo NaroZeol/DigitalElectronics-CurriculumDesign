@@ -2,7 +2,7 @@
 //在stop信号到来时，停止计时，同时熄灭LED
 //然后检查是否犯规，如果犯规，显示F，否则显示计时结果
 module MainLogic(
-    clk_50M,clear,start,stop,CounterFlag,codeout,LED
+    clk_50M,clear,start,stop,CounterFlag,ErrorFlag,LED
 );
 //输入：
 //clk_50M：50MHz时钟，clear：清零，start：开始，stop：停止
@@ -11,8 +11,8 @@ input clk_50M,clear,start,stop;
 //CounterFlag：用于控制计数器的开始、停止、清零
 //00->清零，01->停止，10->开始
 output reg [1:0]CounterFlag;
-//codeout：七段数码管输出，LED：LED指示灯
-output reg[6:0] codeout;
+//ErrorFlag：用于控制数码管显示犯规指示
+output reg ErrorFlag;
 //LED：LED指示灯
 output reg LED;
 
@@ -40,7 +40,7 @@ initial begin
     start_temp <= 1'b0;
     stop_temp <= 1'b0;
     CounterFlag <= 2'b00;
-    codeout <= 7'b0000000;
+    ErrorFlag <= 1'b0;
     LED <= 1'b0;
     counter <= 32'b0;
     RandomNum <= 32'b0;
@@ -53,8 +53,8 @@ always @(posedge clk_50M) begin
     
     //检测clear信号的上升沿
     if(clear_temp == 1'b0 && clear == 1'b1) begin
-        CounterFlag <= 2'b00;
-        codeout <= 7'b0000000;
+        CounterFlag <= 2'b00;   
+        ErrorFlag <= 1'b0;
         LED <= 1'b0;
         counter <= 32'b0;
         RandomNum <= 32'b0;
@@ -74,8 +74,11 @@ always @(posedge clk_50M) begin
         CounterFlag <= 2'b01;
         LED <= 1'b0;
         //检查是否犯规，如果犯规，显示F，否则显示计时结果
-        if (counter < RandomNum) begin
-            codeout <= 7'b1101101;
+        if (counter < RandomNum) begin  
+            ErrorFlag <= 1'b1;
+        end
+        else begin
+            ErrorFlag <= 1'b0;
         end
 
         RandomNum <= 32'b0;//清零随机数
