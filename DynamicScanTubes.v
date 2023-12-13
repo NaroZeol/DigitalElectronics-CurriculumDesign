@@ -10,7 +10,7 @@ module DynamicScanTubes(clk_50M, DataIn, ErrorFlag, DIG, codeout);
 
     //内部信号
 	wire [1:0] SEL;
-	wire [3:0] Y;
+	wire [9:0] Y;
 	wire clk_1k;
 	
 	DivFreq e(clk_50M, clk_1k);//分频器	

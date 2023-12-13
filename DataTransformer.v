@@ -2,7 +2,11 @@
 module DataTransformer(SEL,Data, Y);
     input [1:0] SEL;//模4计数器的值
     input [9:0]Data;//输入数据
-    output reg [3:0] Y;//输入数据的某位数的二进制表示
+    output reg [9:0] Y;//输入数据的某位数的二进制表示
+
+    initial begin
+        Y <= 10'b0;
+    end
 
     always @(SEL)
     begin

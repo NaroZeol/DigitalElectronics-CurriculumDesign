@@ -1,6 +1,6 @@
 //七段线译码器
 module Decoder(Y, ErrorFlag, codeout);
-    input [3:0] Y;
+    input [9:0] Y;
     input ErrorFlag;
     output reg[6:0] codeout;
     
