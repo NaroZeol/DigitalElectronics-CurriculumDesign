@@ -2,7 +2,7 @@
 module Two2FourDecoder(SEL, DIG);
     input [1:0] SEL;//模4计数器的值
     output reg[7:0] DIG;//要亮起的数码管
-
+    
     always @(SEL)
     begin 
         case (SEL)

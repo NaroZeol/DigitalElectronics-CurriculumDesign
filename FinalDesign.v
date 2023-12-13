@@ -12,7 +12,7 @@
 // （7）连续进行多次测试后，可查阅所有测试结果中的最短时间、最长时间和平均时间。
 // （8）两个人比赛，显示两人的反应时间及获胜者。
 module FinalDesign (
-    clk_50M,clear,start,stop,codeout,LED
+    clk_50M,clear,start,stop,DIG,codeout,LED
 );
 
 //输入：
@@ -20,18 +20,21 @@ module FinalDesign (
 input clk_50M,clear,start,stop;
 
 //输出：
-//codeout：七段数码管输出，LED：LED指示灯
-output reg[6:0] codeout;
-output reg LED;
+//DIG：数码管位选
+output wire[7:0] DIG;
+//codeout：七段数码管输出
+output wire[6:0] codeout;
+//LED：LED指示灯
+output wire LED;
 
 //内部信号：
-//CounterOut：计数器输出，要求计算到999
-//CounterFlag：用于控制计数器的开始、停止、清零
+//CounterOut_wire：连接计数器输出，要求计算到999
+//CounterFlag_wire：用于控制计数器的开始、停止、清零
 //00->清零，01->停止，10->开始
-//ErrorFlag：用于控制数码管显示犯规指示
-reg [9:0]CounterOut;
-reg [1:0]CounterFlag;
-reg ErrorFlag;
+//ErrorFlag_wire：用于控制数码管显示犯规指示
+wire [9:0]CounterOut_wire;
+wire [1:0]CounterFlag_wire;
+wire ErrorFlag_wire;
 
 //主逻辑，生成随机数，在start信号到来时，开始计时，同时点亮LED，
 //在stop信号到来时，停止计时，同时熄灭LED
@@ -41,8 +44,8 @@ MainLogic ML(
     .clear(clear),
     .start(start),
     .stop(stop),
-    .CounterFlag(CounterFlag),//根据不同输入信号产生不同的CounterFlag
-    .ErrorFlag(ErrorFlag),//控制数码管显示犯规指示    
+    .CounterFlag(CounterFlag_wire),//根据不同输入信号产生不同的CounterFlag
+    .ErrorFlag(ErrorFlag_wire),//控制数码管显示犯规指示    
     .LED(LED)//控制LED指示灯
 );
 
@@ -50,16 +53,16 @@ MainLogic ML(
 //由MainLogic通过传递CounterFlag控制开始、停止、清零
 Counter C(
     .clk_50M(clk_50M),
-    .CounterFlag(CounterFlag),
-    .CounterOut(CounterOut)
+    .CounterFlag(CounterFlag_wire),
+    .CounterOut(CounterOut_wire)
 );
 
 //动态扫描数码管，显示计数器的值，以及犯规指示(以F表示)
 //仅与计时器通信，不与其他模块通信
 DynamicScanTubes DST(
     .clk_50M(clk_50M),
-    .DataIn(CounterOut),
-    .ErrorFlag(ErrorFlag),
+    .DataIn(CounterOut_wire),
+    .ErrorFlag(ErrorFlag_wire),
     .DIG(DIG),
     .codeout(codeout)
 );

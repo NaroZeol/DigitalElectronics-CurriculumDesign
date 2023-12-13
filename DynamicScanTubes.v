@@ -5,8 +5,8 @@ module DynamicScanTubes(clk_50M, DataIn, ErrorFlag, DIG, codeout);
     input [9:0] DataIn;//计数器的值
     
     //输出信号
-    output reg[7:0] DIG;
-    output reg[6:0] codeout;
+    output wire[7:0] DIG;
+    output wire[6:0] codeout;
 
     //内部信号
 	wire [1:0] SEL;
