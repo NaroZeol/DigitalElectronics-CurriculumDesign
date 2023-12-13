@@ -70,9 +70,6 @@ always @(posedge clk_50M) begin
 
     //检测stop信号的上升沿
     if(stop_temp == 1'b0 && stop == 1'b1) begin
-        //停止计时，同时熄灭LED
-        CounterFlag <= 2'b01;
-        LED <= 1'b0;
         //检查是否犯规，如果犯规，显示F，否则显示计时结果
         if (counter < RandomNum) begin  
             ErrorFlag <= 1'b1;
@@ -81,13 +78,17 @@ always @(posedge clk_50M) begin
             ErrorFlag <= 1'b0;
         end
 
+        //停止计时，同时熄灭LED
+        CounterFlag <= 2'b01;
+        LED <= 1'b0;
+
         RandomNum <= 32'b0;//清零随机数
         counter <= 32'b0;//清零计数器
         //不要求清零CounterOut，因为CounterOut需要作为数码管的输入一直保持
     end
 
     //检查是否到达随机时间
-    if (RandomNum != 0 && counter == RandomNum) begin
+    if (RandomNum != 0 && counter == RandomNum && CounterFlag != 2'b10) begin
         //开始计时，同时点亮LED
         CounterFlag <= 2'b10;
         LED <= 1'b1;
