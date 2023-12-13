@@ -1,13 +1,13 @@
 //模4计数器
-module ModFourCounter(clk_1k, SEL);
-    input clk_1k;
+module ModFourCounter(new_clk, SEL);
+    input new_clk;
     output reg [1:0] SEL;
     
     initial begin
         SEL <= 2'b00;
     end
 
-    always @(posedge clk_1k)
+    always @(posedge new_clk)
     begin
         if (SEL == 2'd2)
             SEL <= 2'd0;

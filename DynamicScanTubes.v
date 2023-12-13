@@ -11,10 +11,10 @@ module DynamicScanTubes(clk_50M, DataIn, ErrorFlag, DIG, codeout);
     //内部信号
 	wire [1:0] SEL;
 	wire [9:0] Y;
-	wire clk_1k;
+	wire new_clk;
 	
-	DivFreq e(clk_50M, clk_1k);//分频器	
-    ModFourCounter a(clk_1k, SEL);//模4计数器
+	DivFreq e(clk_50M, new_clk);//分频器	
+    ModFourCounter a(new_clk, SEL);//模4计数器
     DataTransformer b(SEL, DataIn, Y);//4-1数据选择器(选择计数器输入的某一位)
     Decoder c(Y, ErrorFlag, codeout);///七段线译码器
     Two2FourDecoder d(SEL, DIG);//2-4译码器，选择要亮起的数码管
