@@ -40,7 +40,6 @@ MainLogic ML(
     .start(start),
     .stop(stop),
     .CounterFlag(CounterFlag),//根据不同输入信号产生不同的CounterFlag
-    .CounterOut(CounterOut),//接受计数器输出用于判断是否犯规
     .codeout(codeout),//控制数码管显示犯规指示    
     .LED(LED)//控制LED指示灯
 );
