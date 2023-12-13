@@ -1,0 +1,17 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+
+        "**/*.qsf" :true,
+        "**/*.qpf" :true,
+        "**/*.bak" :true,
+        "output_files/" :true,
+        "db/" :true,
+        "incremental_db/" :true,
+    }
+}
