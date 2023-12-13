@@ -1,3 +1,4 @@
+`timescale 1ns/1ns
 module FinalDesign_tb;
 
 reg clk_50M;
@@ -27,21 +28,26 @@ always #10 clk_50M = ~clk_50M;
 initial begin
     // Initialize inputs
     clk_50M = 0;
-    clear = 1;
-    start = 0;
     stop = 0;
+    start = 0;
+    
+    clear = 0;
+    #1000;
+    clear = 1;
 
     // Wait for a few clock cycles
-    #100;
+    #10000;
 
     // Release clear signal
     clear = 0;
 
     // Wait for a few clock cycles
-    #100;
+    #10000;
 
     // Set start signal
     start = 1;
+    #10000;
+    start = 0;
 
     // Wait for 2~6 seconds
     #1000000000
@@ -54,6 +60,8 @@ initial begin
 
     // Set stop signal
     stop = 1;
+    #100
+    stop = 0;
 
     #100000000;//Waiting for 0 ~ 1 second(0~1000000000ns)
 end
