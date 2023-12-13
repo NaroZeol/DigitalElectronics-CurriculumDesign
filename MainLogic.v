@@ -17,6 +17,11 @@ output reg[6:0] codeout;
 output reg LED;
 
 //内部信号：
+//RandomGenerator：随机数生成器，用于产生随机数
+//实质是一个32位的计数器，每个时钟周期加1。因为时钟频率非常高
+//所以可以认为每个时钟周期加1的时间间隔非常短，可以认为是随机的
+reg [31:0]RandomGenerator;
+
 //RandomNum：随机数，用于产生随机时间，2s到6s之间
 //在50MHz时钟下，2s到6s之间的时间为100000000到300000000
 reg [31:0]RandomNum;
@@ -39,9 +44,13 @@ initial begin
     LED <= 1'b0;
     counter <= 32'b0;
     RandomNum <= 32'b0;
+    RandomGenerator <= 32'b0;
 end
 
 always @(posedge clk_50M) begin
+    //更新随机数生成器，无所谓溢出问题
+    RandomGenerator <= RandomGenerator + 1;
+    
     //检测clear信号的上升沿
     if(clear_temp == 1'b0 && clear == 1'b1) begin
         CounterFlag <= 2'b00;
@@ -54,7 +63,7 @@ always @(posedge clk_50M) begin
     //检测start信号的上升沿
     if(start_temp == 1'b0 && start == 1'b1) begin
         //产生随机数
-        RandomNum <= $random;
+        RandomNum <= RandomGenerator;
         //随机数范围为0到2^32-1，将其限制在100000000到300000000之间
         RandomNum <= RandomNum % 200000000 + 100000000;
     end
