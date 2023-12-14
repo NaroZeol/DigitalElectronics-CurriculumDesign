@@ -12,7 +12,7 @@
 // （7）连续进行多次测试后，可查阅所有测试结果中的最短时间、最长时间和平均时间。
 // （8）两个人比赛，显示两人的反应时间及获胜者。
 module FinalDesign (
-    clk_50M,clear,start,stop,DIG,codeout,LED
+    clk_50M,clear,start,stop,DIG,codeout,LED,LED_InRuning
 );
 
 //输入：
@@ -26,6 +26,8 @@ output wire[7:0] DIG;
 output wire[6:0] codeout;
 //LED：LED指示灯
 output wire LED;
+//LED_InRuning：用于标识运行中
+output wire LED_InRuning;
 
 //内部信号：
 //CounterOut_wire：连接计数器输出，要求计算到999
@@ -46,7 +48,8 @@ MainLogic ML(
     .stop(stop),
     .CounterFlag(CounterFlag_wire),//根据不同输入信号产生不同的CounterFlag
     .ErrorFlag(ErrorFlag_wire),//控制数码管显示犯规指示    
-    .LED(LED)//控制LED指示灯
+    .LED(LED),//控制LED指示灯
+    .LED_InRuning(LED_InRuning)
 );
 
 //计数器，每1ms加1，计数到999时停止计数

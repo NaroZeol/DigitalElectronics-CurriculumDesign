@@ -2,7 +2,7 @@
 //在stop信号到来时，停止计时，同时熄灭LED
 //然后检查是否犯规，如果犯规，显示F，否则显示计时结果
 module MainLogic(
-    clk_50M,clear,start,stop,CounterFlag,ErrorFlag,LED
+    clk_50M,clear,start,stop,CounterFlag,ErrorFlag,LED,LED_InRuning
 );
 //输入：
 //clk_50M：50MHz时钟，clear：清零，start：开始，stop：停止
@@ -15,6 +15,8 @@ output reg [1:0]CounterFlag;
 output reg ErrorFlag;
 //LED：LED指示灯
 output reg LED;
+//LED_InRuning：用于标识运行中
+output reg LED_InRuning;
 
 //内部信号：
 //RandomGenerator：随机数生成器，用于产生随机数
@@ -56,12 +58,14 @@ always @(posedge clk_50M) begin
         CounterFlag <= 2'b00;   
         ErrorFlag <= 1'b0;
         LED <= 1'b0;
+        LED_InRuning <= 1'b0;
         counter <= 32'b0;
         RandomNum <= 32'b0;
     end
 
     //检测start信号的上升沿
     if(start_temp == 1'b0 && start == 1'b1) begin
+        LED_InRuning <= 1'b1;
         //随机数范围为0到2^32-1，将其限制在100000000到300000000之间
         RandomNum <= RandomGenerator % 200000000 + 100000000;
     end
@@ -78,6 +82,7 @@ always @(posedge clk_50M) begin
 
         //停止计时，同时熄灭LED
         CounterFlag <= 2'b01;
+        LED_InRuning <= 1'b0;
         LED <= 1'b0;
 
         RandomNum <= 32'b0;//清零随机数
