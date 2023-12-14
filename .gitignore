@@ -1,6 +1,7 @@
 *.qpf
 *.qsf
 *.bak
+*.qws
 db/
 output_files/
 incremental_db/

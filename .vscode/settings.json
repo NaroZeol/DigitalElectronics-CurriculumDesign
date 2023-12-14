@@ -10,6 +10,7 @@
         "**/*.qsf" :true,
         "**/*.qpf" :true,
         "**/*.bak" :true,
+        "**/*.qws" :true,
         "output_files/" :true,
         "db/" :true,
         "incremental_db/" :true,
