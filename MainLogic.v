@@ -32,7 +32,7 @@ reg [31:0]RandomNum;
 reg clear_temp,start_temp,stop_temp;
 
 //counter，内置计数器，用于计算随机时间，在随机时间结束后，开始计时，同时点亮LED
- reg [31:0]counter;
+reg [31:0]counter;
 
 initial begin
     //初始化
@@ -62,10 +62,8 @@ always @(posedge clk_50M) begin
 
     //检测start信号的上升沿
     if(start_temp == 1'b0 && start == 1'b1) begin
-        //产生随机数
-        RandomNum <= RandomGenerator;
         //随机数范围为0到2^32-1，将其限制在100000000到300000000之间
-        RandomNum <= RandomNum % 200000000 + 100000000;
+        RandomNum <= RandomGenerator % 200000000 + 100000000;
     end
 
     //检测stop信号的上升沿
