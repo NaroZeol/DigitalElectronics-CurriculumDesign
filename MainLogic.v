@@ -1,6 +1,6 @@
 //主逻辑，生成随机数，在start信号到来时，开始计时，同时点亮LED，
 //在stop信号到来时，停止计时，同时熄灭LED
-//然后检查是否犯规，如果犯规，显示F，否则显示计时结果
+//然后检查是否犯规，如果犯规，显示E，否则显示计时结果
 module MainLogic(
     clk_50M,clear,start,stop,CounterFlag,ErrorFlag,LED,LED_InRuning
 );
@@ -24,7 +24,7 @@ output reg LED_InRuning;
 //所以可以认为每个时钟周期加1的时间间隔非常短，可以认为是随机的
 reg [31:0]RandomGenerator;
 
-//RandomNum：随机数，用于产生随机时间，2s到6s之间
+//RandomNum：用于表示随机时间，2s到6s之间
 //在50MHz时钟下，2s到6s之间的时间为100000000到300000000
 reg [31:0]RandomNum;
 
@@ -78,7 +78,6 @@ always @(posedge clk_50M) begin
         LED_InRuning <= 1'b0;
         LED <= 1'b0;
 
-        //不要求清零CounterOut，因为CounterOut需要作为数码管的输入一直保持
     end
 
     //检查是否到达随机时间
@@ -87,11 +86,13 @@ always @(posedge clk_50M) begin
         CounterFlag <= 2'b10;
         LED <= 1'b1;
     end
+    //如果没有到达随机时间，更新内置计数器
     else if (RandomNum != 0 && counter != RandomNum && CounterFlag == 2'b00) begin
         counter <= counter + 1;//更新内置计数器
     end
+    //如果此时处于暂停状态，检查是否犯规
     else if (RandomNum != 0 && CounterFlag == 2'b01) begin
-        //检查是否犯规，如果犯规，显示F，否则显示计时结果
+        //检查是否犯规，如果犯规，将ErrorFlag置1，否则置0
         if (counter < RandomNum) begin  
             ErrorFlag <= 1'b1;
         end

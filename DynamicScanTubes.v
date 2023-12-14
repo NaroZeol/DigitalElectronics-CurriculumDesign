@@ -56,7 +56,7 @@ module DynamicScanTubes(clk_50M, DataIn, ErrorFlag, DIG, codeout);
     always @(*)
     begin
         if (ErrorFlag == 1)
-            codeout = 7'b1111001;//F
+            codeout = 7'b1111001;//E
         else
             case(Y)
             4'd0 : codeout = 7'b0111111;//gfedcba

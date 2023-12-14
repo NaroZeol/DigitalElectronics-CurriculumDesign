@@ -40,7 +40,7 @@ wire ErrorFlag_wire;
 
 //主逻辑，生成随机数，在start信号到来时，开始计时，同时点亮LED，
 //在stop信号到来时，停止计时，同时熄灭LED
-//然后检查是否犯规，如果犯规，显示F，否则显示计时结果
+//然后检查是否犯规，如果犯规，显示E，否则显示计时结果
 MainLogic ML(
     .clk_50M(clk_50M),
     .clear(clear),
