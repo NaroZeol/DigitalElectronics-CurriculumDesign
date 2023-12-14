@@ -5,17 +5,83 @@ module DynamicScanTubes(clk_50M, DataIn, ErrorFlag, DIG, codeout);
     input [9:0] DataIn;//计数器的值
     
     //输出信号
-    output wire[7:0] DIG;
-    output wire[6:0] codeout;
+    output reg[7:0] DIG;
+    output reg[6:0] codeout;
 
     //内部信号
-	wire [1:0] SEL;
-	wire [9:0] Y;
-	wire new_clk;
-	
-	DivFreq e(clk_50M, new_clk);//分频器	
-    ModFourCounter a(new_clk, SEL);//模4计数器
-    DataTransformer b(SEL, DataIn, Y);//4-1数据选择器(选择计数器输入的某一位)
-    Decoder c(Y, ErrorFlag, codeout);///七段线译码器
-    Two2FourDecoder d(SEL, DIG);//2-4译码器，选择要亮起的数码管
+	reg [1:0] SEL;
+	reg [9:0] Y;
+	reg new_clk;
+	reg [15:0] counter;//16位计数器
+
+    initial begin
+        counter <= 0;//计数器清零
+        new_clk <= 0;//时钟初始化
+		  SEL <= 2'b00;
+		  Y <= 10'b0;
+		  DIG <= 8'b0000_0000;
+    end
+
+    //时钟分频
+    always @(posedge clk_50M) begin
+        if (counter == 1500) begin
+            counter <= 0;//计数器清零
+            new_clk <= ~new_clk;//时钟跳变
+        end else begin
+            counter <= counter + 1;//计数器加一
+        end
+    end
+
+    //模四计数器
+    always @(posedge new_clk)
+    begin
+        if (SEL == 2'd2)
+            SEL <= 2'd0;
+        else
+            SEL <= SEL + 1;
+    end
+
+    //数码管显示
+    always @(SEL)
+    begin
+        case (SEL)
+            2'd0: Y <= DataIn % 10;//输入数据的倒数第一位
+            2'd1: Y <= (DataIn / 10) % 10;//输入数据的倒数第二位 
+            2'd2: Y <= DataIn / 100;//输入数据的倒数第三位
+            default: Y <= 4'b0000; 
+        endcase
+    end
+
+    //数码管译码
+    always @(*)
+    begin
+        if (ErrorFlag == 1)
+            codeout = 7'b1111001;//F
+        else
+            case(Y)
+            4'd0 : codeout = 7'b0111111;//gfedcba
+            4'd1 : codeout = 7'b0000110;
+            4'd2 : codeout = 7'b1011011;
+            4'd3 : codeout = 7'b1001111;
+            4'd4 : codeout = 7'b1100110;
+            4'd5 : codeout = 7'b1101101;
+            4'd6 : codeout = 7'b1111101;
+            4'd7 : codeout = 7'b0000111;
+            4'd8 : codeout = 7'b1111111;
+            4'd9 : codeout = 7'b1101111;
+            default: codeout = 7'b0000000;
+            endcase
+    end
+    
+    //数码管显示
+    always @(SEL)
+    begin 
+        case (SEL)
+            2'd0: DIG <= 8'b0000_0001;//第一个数码管亮起
+            2'd1: DIG <= 8'b0000_0010;//第二个数码管亮起
+            2'd2: DIG <= 8'b0000_0100;//第三个数码管亮起
+            default: DIG <= 8'b0000_0000;
+        endcase
+    end
+	 
 endmodule
