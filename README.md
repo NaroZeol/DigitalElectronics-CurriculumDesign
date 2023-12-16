@@ -32,11 +32,7 @@
 - Counter.v
 
 ### 动态扫描数码管
-
-(改自数电实验5，保留了分层设计，或许之后会想办法整合)
-- DivFreq.v
-- DataTransformer.v
-- Decoder.v
 - DynamicScanTubes.v
-- ModFourCounter.v
-- Two2FourDecoder.v
+
+## 测试文件
+- FinalDesign_tb.v
