@@ -47,8 +47,7 @@ Counter C(
     .CounterOut(CounterOut_wire)
 );
 
-//动态扫描数码管，显示计数器的值，以及犯规指示(以F表示)
-//仅与计时器通信，不与其他模块通信
+//动态扫描数码管，显示计数器的值，以及犯规指示(以E表示)
 DynamicScanTubes DST(
     .clk_50M(clk_50M),
     .DataIn(CounterOut_wire),
