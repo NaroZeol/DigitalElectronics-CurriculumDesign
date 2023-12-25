@@ -42,7 +42,8 @@ initial begin
     clear = 0;
 
     // Wait for a few clock cycles
-    #10000;
+    #1000000000;
+    //1s
 
     // Set start signal
     start = 1;
@@ -52,15 +53,16 @@ initial begin
     // Wait for 2~6 seconds
     #1000000000
     #1000000000
-    //2s
+    #1000000000
+    //3s
 
     // Wait for 0~1 second(Catch the signal)
     #500000000
     //0.5s
 
-    // Set stop signal
+    //Set stop signal
     stop = 1;
-    #100
+    #10000;
     stop = 0;
 
     #100000000;//Waiting for 0 ~ 1 second(0~1000000000ns)
